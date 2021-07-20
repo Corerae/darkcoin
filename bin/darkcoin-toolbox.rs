@@ -25,7 +25,7 @@ async fn main() -> anyhow::Result<()> {
             let env = darkcoin::Environment::open_ro(
                 mdbx::Environment::new(),
                 &chaindata,
-                &darkcoin::tables::TABLE_MAP,
+                &darkcoin::kv::tables::TABLE_MAP,
             )?;
             let mut sizes = table_sizes(&env.begin_ro_txn()?)?
                 .into_iter()
