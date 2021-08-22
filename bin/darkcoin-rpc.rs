@@ -1,12 +1,13 @@
-use darkcoin::stagedsync;
 use structopt::StructOpt;
 use tracing_subscriber::{prelude::*, EnvFilter};
 
 #[derive(StructOpt)]
-#[structopt(name = "Darkcoin", about = "Ethereum client based on Thorax architecture")]
+#[structopt(name = "Darkcoin RPC", about = "RPC server for Darkcoin")]
 pub struct Opt {
     #[structopt(long, env)]
     pub tokio_console: bool,
+    #[structopt(long, env)]
+    pub kv_address: String,
 }
 
 #[tokio::main]
@@ -17,7 +18,7 @@ async fn main() -> anyhow::Result<()> {
         .unwrap_or_default()
         .is_empty()
     {
-        EnvFilter::new("darkcoin=info")
+        EnvFilter::new("darkcoin=info,rpc=info")
     } else {
         EnvFilter::from_default_env()
     };
@@ -36,13 +37,5 @@ async fn main() -> anyhow::Result<()> {
         registry.with(filter).init();
     }
 
-    let db = darkcoin::new_mem_database()?;
-
-    let mut staged_sync = stagedsync::StagedSync::new();
-    staged_sync.push(darkcoin::stages::HeaderDownload);
-    // staged_sync.push(darkcoin::stages::BlockHashes);
-    // staged_sync.push(darkcoin::stages::ExecutionStage);
-
-    // stagedsync::StagedSync::new(vec![], vec![]);
-    staged_sync.run(&db).await?;
+    Ok(())
 }
