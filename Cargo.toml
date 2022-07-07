@@ -83,3 +83,7 @@ name = "darkcoin-rpc"
 [[bin]]
 path = "bin/darkcoin-toolbox.rs"
 name = "darkcoin-toolbox"
+
+[[bin]]
+path = "bin/blockhashes_stage.rs"
+name = "blockhashes_stage"
